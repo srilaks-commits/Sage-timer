@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sage Green Countdown Timer</title>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #5F7161;
+        font-family: Arial, sans-serif;
+        color: #F4F1DE;
+    }
+    .container {
+        text-align: center;
+    }
+    #time {
+        font-size: 72px;
+        margin-bottom: 20px;
+    }
+    input {
+        padding: 10px;
+        width: 80px;
+        margin: 5px;
+        border-radius: 8px;
+        border: none;
+        text-align: center;
+        font-size: 16px;
+    }
+    button {
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        border-radius: 8px;
+        background-color: #D0C9C0;
+        color: #5F7161;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    button:hover {
+        opacity: 0.85;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div id="time">00:00</div>
+
+    <div>
+        <input type="number" id="minutes" placeholder="Min" min="0">
+        <input type="number" id="seconds" placeholder="Sec" min="0" max="59">
+    </div>
+
+    <button onclick="setTimer()">Set</button>
+    <button onclick="startTimer()">Start</button>
+    <button onclick="pauseTimer()">Pause</button>
+    <button onclick="resetTimer()">Reset</button>
+</div>
+
+<script>
+let time = 0;
+let initialTime = 0;
+let timerInterval = null;
+
+function updateDisplay() {
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+    document.getElementById("time").textContent =
+        String(minutes).padStart(2, '0') + ":" +
+        String(seconds).padStart(2, '0');
+}
+
+function setTimer() {
+    let min = parseInt(document.getElementById("minutes").value) || 0;
+    let sec = parseInt(document.getElementById("seconds").value) || 0;
+    time = (min * 60) + sec;
+    initialTime = time;
+    updateDisplay();
+}
+
+function startTimer() {
+    if (timerInterval || time <= 0) return;
+    timerInterval = setInterval(() => {
+        if (time > 0) {
+            time--;
+            updateDisplay();
+        } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            alert("Time's up!");
+        }
+    }, 1000);
+}
+
+function pauseTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+}
+
+function resetTimer() {
+    pauseTimer();
+    time = initialTime;
+    updateDisplay();
+}
+
+updateDisplay();
+</script>
+</body>
+</html>
